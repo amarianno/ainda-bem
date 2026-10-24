@@ -8,7 +8,7 @@ Implementação local ampliada a partir do ZIP original. Projeto Neon criado e d
 |---|---|---|
 | Next.js | Dependências, lockfile, dashboard com consulta autenticada | TypeScript, seis testes e build de produção passaram; auditoria final sem vulnerabilidades reportadas |
 | Git | Repositório local; sem segredos; commit de implementação | Código enviado e relido em https://github.com/amarianno/ainda-bem (público), branch main; commit inicial da implementação de33eee75b72bba2fb3aebdf0aebd6d59a2e8db1. Workflow de build/testes adicionado; execução remota ainda não validada. |
-| Vercel | Configuração preparada; cron terça/sexta | Projeto criado pelo usuário. Navegador confirmou vínculo ao GitHub/main e deploy Ready. Dashboard abre. Nenhuma variável de ambiente configurada. Conector retorna 404; integração operacional não validada. |
+| Vercel | Configuração preparada; cron terça/sexta | Projeto criado pelo usuário. Navegador confirmou vínculo ao GitHub/main e deploy Ready. Dashboard abre. Acesso do conector restabelecido. Nove variáveis de produção configuradas, segredos armazenados como sensitive, e novo deploy Ready. GET /api/status e /api/metrics autenticados retornaram HTTP 200; consulta da aplicação ao PostgreSQL validada. YouTube ainda sem autorização; nenhum episódio. |
 | Neon | Schema e migração incremental; runner transacional | Projeto criado; duas migrações testadas no branch de validação e aplicadas em production; cinco tabelas confirmadas |
 | Google OAuth | Estado em cookie, token AES-GCM, canal validado no código; removida chave da URL | Sem credenciais ou consentimento; não testado no canal |
 | Worker | Dockerfile, config Railway, fila/lease/retries, FFmpeg e OpenAI TTS | FFmpeg/ffprobe local passaram; Docker indisponível, build do contêiner não executado |
@@ -30,7 +30,7 @@ Nenhum upgrade ou contratação realizado. Custos futuros dependem do uso e dos 
 
 ## Dependências do usuário
 
-Aplicação implantada, mas sem variáveis de ambiente. Conexão da Vercel ainda não enxerga o projeto existente; causa exata não identificada. Configurar banco e segredos nos serviços, conectar Railway, concluir OAuth no canal aprovado e fornecer referências visuais autorizadas. Não enviar credenciais em chat nem versioná-las.
+Aplicação implantada com banco e segredos básicos configurados na produção. Conectar Railway, configurar cliente OAuth Google, concluir consentimento no canal aprovado, fornecer credenciais de IA nos serviços e referências visuais autorizadas. Validação manual do cron mutante não executada: revisão automática bloqueou o teste por possível criação de conteúdo em produção. Não enviar credenciais em chat nem versioná-las.
 
 ## Pendências de engenharia para automação completa
 
