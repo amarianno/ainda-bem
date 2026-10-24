@@ -7,7 +7,7 @@ Implementação local ampliada a partir do ZIP original. Projeto Neon criado e d
 | Área | Entrega | Validação |
 |---|---|---|
 | Next.js | Dependências, lockfile, dashboard com consulta autenticada | TypeScript, seis testes e build de produção passaram; auditoria final sem vulnerabilidades reportadas |
-| Git | Repositório local; sem segredos; commit de implementação | Repositório remoto informado: https://github.com/amarianno/ainda-bem (público); envio e verificação em andamento |
+| Git | Repositório local; sem segredos; commit de implementação | Código enviado e relido em https://github.com/amarianno/ainda-bem (público), branch main; commit inicial da implementação de33eee75b72bba2fb3aebdf0aebd6d59a2e8db1. Workflow de build/testes adicionado; execução remota ainda não validada. |
 | Vercel | Configuração preparada; cron terça/sexta | Conexão autenticada lista equipe; criação do projeto recusada com HTTP 403 (forbidden); sem deployment |
 | Neon | Schema e migração incremental; runner transacional | Projeto criado; duas migrações testadas no branch de validação e aplicadas em production; cinco tabelas confirmadas |
 | Google OAuth | Estado em cookie, token AES-GCM, canal validado no código; removida chave da URL | Sem credenciais ou consentimento; não testado no canal |
@@ -30,7 +30,7 @@ Custos futuros dependem do plano Vercel, computação/volume Railway, uso e arma
 
 ## Dependências do usuário
 
-GitHub autenticado como amarianno; repositório amarianno/ainda-bem fornecido pelo usuário, confirmado vazio e com permissão de escrita. Vercel autenticada na equipe amarianno-6406 (team_OZg9P37Eqs9VjZv80733u4E5), mas criação de projeto recusada por permissão. CLI Vercel ausente e sem credencial própria disponível. Corrigir a permissão de criação do projeto na Vercel ou criar/importar o projeto na conta correta. Conectar Railway. Autorizar Google OAuth no canal indicado. Fornecer referências aprovadas de Clara/Pingo e conteúdo/fontes para o primeiro vídeo privado. Inserir chaves de OpenAI/Gemini diretamente nos segredos dos serviços. Escolher modelos, teto de gasto e destino de alertas. Nunca enviar senhas ou tokens em chat.
+GitHub autenticado como amarianno; repositório amarianno/ainda-bem fornecido pelo usuário, código enviado e arquivos essenciais relidos. A cópia local está vinculada a origin/main; histórico local anterior preservado em local-implementation-history. Vercel autenticada na equipe amarianno-6406 (team_OZg9P37Eqs9VjZv80733u4E5), mas criação de projeto recusada por permissão. CLI Vercel ausente e sem credencial própria disponível. Corrigir a permissão de criação do projeto na Vercel ou criar/importar o projeto na conta correta. Conectar Railway. Autorizar Google OAuth no canal indicado. Fornecer referências aprovadas de Clara/Pingo e conteúdo/fontes para o primeiro vídeo privado. Inserir chaves de OpenAI/Gemini diretamente nos segredos dos serviços. Escolher modelos, teto de gasto e destino de alertas. Nunca enviar senhas ou tokens em chat.
 
 ## Pendências de engenharia para automação completa
 
