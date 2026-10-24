@@ -3,11 +3,22 @@ import { spawnSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 import { resolve } from 'node:path';
 import { decrypt } from '../lib/crypto';
+import { authorizedClient, expectedChannel } from '../lib/auth';
 async function preflight(){
  const ff=spawnSync('ffmpeg',['-version'],{stdio:'ignore'});if(ff.status!==0)throw new Error('FFmpeg unavailable');
  const dir=resolve(process.env.WORK_DIR||'work');await mkdir(dir,{recursive:true});await mkdir(resolve(process.env.MEDIA_ROOT||'work/media'),{recursive:true});
  const probe=resolve(dir,'.probe-'+randomUUID());try{await writeFile(probe,'worker-ready',{flag:'wx'});if(await readFile(probe,'utf8')!=='worker-ready')throw new Error('Storage verification failed');}finally{await unlink(probe).catch(()=>{});}
  const r=await pool.query("SELECT refresh_token_ciphertext FROM oauth_tokens WHERE provider='youtube'");let tokenDecryptable=false;if(r.rowCount){decrypt(r.rows[0].refresh_token_ciphertext);tokenDecryptable=true;}
+ const integrations:{[key:string]:boolean|number|string}={event:'integration_readiness'};
+ if(process.env.GOOGLE_CLIENT_ID&&process.env.GOOGLE_CLIENT_SECRET&&tokenDecryptable){
+  try{const auth=await authorizedClient();const t=(await auth.getAccessToken()).token;if(!t)throw new Error('Missing access token');const response=await fetch('https://www.googleapis.com/youtube/v3/channels?part=id&mine=true',{headers:{Authorization:'Bearer '+t},signal:AbortSignal.timeout(20000)});integrations.googleHttpStatus=response.status;integrations.googleRefresh=true;if(response.ok){const data=await response.json();integrations.expectedChannelVerified=data.items?.[0]?.id===expectedChannel;}}
+  catch{integrations.googleRefresh=false;}
+ }
+ if(process.env.OPENAI_API_KEY&&process.env.OPENAI_TTS_MODEL){
+  try{const response=await fetch('https://api.openai.com/v1/models/'+encodeURIComponent(process.env.OPENAI_TTS_MODEL),{headers:{Authorization:'Bearer '+process.env.OPENAI_API_KEY},signal:AbortSignal.timeout(20000)});integrations.openaiModelHttpStatus=response.status;integrations.openaiModelAccessible=response.ok;}
+  catch{integrations.openaiModelAccessible=false;}
+ }
+ console.log(JSON.stringify(integrations));
  console.log(JSON.stringify({event:'worker_preflight_passed',ffmpeg:true,storageWritable:true,database:true,tokenDecryptable,googleConfigured:!!(process.env.GOOGLE_CLIENT_ID&&process.env.GOOGLE_CLIENT_SECRET),ttsConfigured:!!(process.env.OPENAI_API_KEY&&process.env.OPENAI_TTS_MODEL)}));
 }
 import { pool } from '../lib/db';import { render } from './render';import { upload } from './upload';
