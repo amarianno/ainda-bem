@@ -12,7 +12,9 @@ async function preflight(){
  const integrations:{[key:string]:boolean|number|string}={event:'integration_readiness'};
  if(process.env.GOOGLE_CLIENT_ID&&process.env.GOOGLE_CLIENT_SECRET&&tokenDecryptable){
   try{const auth=await authorizedClient();const t=(await auth.getAccessToken()).token;if(!t)throw new Error('Missing access token');const response=await fetch('https://www.googleapis.com/youtube/v3/channels?part=id&mine=true',{headers:{Authorization:'Bearer '+t},signal:AbortSignal.timeout(20000)});integrations.googleHttpStatus=response.status;integrations.googleRefresh=true;if(response.ok){const data=await response.json();integrations.expectedChannelVerified=data.items?.[0]?.id===expectedChannel;}}
-  catch{integrations.googleRefresh=false;}
+  catch(e){integrations.googleRefresh=false;const err=e as {response?:{status?:number,data?:{error?:unknown}},code?:unknown};if(err.response?.status)integrations.googleTokenHttpStatus=err.response.status;const code=err.response?.data?.error;if(typeof code==='string'&&/^[a-z_]+$/.test(code))integrations.googleTokenError=code;}
+  integrations.googleClientIdFormatValid=process.env.GOOGLE_CLIENT_ID.trim().endsWith('.apps.googleusercontent.com');
+  integrations.googleCredentialsHaveWhitespace=process.env.GOOGLE_CLIENT_ID!==process.env.GOOGLE_CLIENT_ID.trim()||process.env.GOOGLE_CLIENT_SECRET!==process.env.GOOGLE_CLIENT_SECRET.trim();
  }
  if(process.env.OPENAI_API_KEY&&process.env.OPENAI_TTS_MODEL){
   try{const response=await fetch('https://api.openai.com/v1/models/'+encodeURIComponent(process.env.OPENAI_TTS_MODEL),{headers:{Authorization:'Bearer '+process.env.OPENAI_API_KEY},signal:AbortSignal.timeout(20000)});integrations.openaiModelHttpStatus=response.status;integrations.openaiModelAccessible=response.ok;}
