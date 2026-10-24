@@ -8,7 +8,7 @@ const hash=(b:Buffer)=>createHash('sha256').update(b).digest('hex');
 async function ffmpeg(args:string[]){await new Promise<void>((ok,no)=>{const c=spawn('ffmpeg',['-y',...args],{stdio:['ignore','ignore','pipe']});c.stderr.on('data',()=>{});c.on('error',no);c.on('close',x=>x===0?ok():no(new Error('FFmpeg failed')));});}
 function wrap(text:string,width:number){const lines:string[]=[];let line='';for(const word of text.replace(/[\r\n]/g,' ').split(/\s+/)){if((line+' '+word).length>width){lines.push(line);line=word;}else line+=(line?' ':'')+word;}if(line)lines.push(line);return lines.join('\n');}
 export async function render(id:string,input:unknown){
- if(!/^ainda-bem-\d{4}-\d{2}-\d{2}$/.test(id))throw new Error('Invalid edition');
+ if(!/^ainda-bem-\d{4}-\d{2}-\d{2}(?:-v[1-9]\d*)?$/.test(id))throw new Error('Invalid edition');
  const s=validateEditorial(input),root=resolve(process.env.MEDIA_ROOT||'work/media');await mkdir(root,{recursive:true});const files:string[]=[];
  for(const v of s.visuals){const f=resolve(root,v.path);if(!f.startsWith(root+sep))throw new Error('Media outside root');
  try{await access(f);}catch{const r=await pool.query('SELECT data_base64 FROM media_assets WHERE sha256=$1',[v.sha256]);if(!r.rowCount)throw new Error('Approved media unavailable');const bytes=Buffer.from(r.rows[0].data_base64,'base64');if(hash(bytes)!==v.sha256)throw new Error('Media hash mismatch');await mkdir(resolve(f,'..'),{recursive:true});await writeFile(f,bytes);}
