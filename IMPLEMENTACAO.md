@@ -8,7 +8,7 @@ Implementação local ampliada a partir do ZIP original. Projeto Neon criado e d
 |---|---|---|
 | Next.js | Dependências, lockfile, dashboard com consulta autenticada | TypeScript, seis testes e build de produção passaram; auditoria final sem vulnerabilidades reportadas |
 | Git | Repositório local; sem segredos; commit de implementação | Código enviado e relido em https://github.com/amarianno/ainda-bem (público), branch main; commit inicial da implementação de33eee75b72bba2fb3aebdf0aebd6d59a2e8db1. Workflow de build/testes adicionado; execução remota ainda não validada. |
-| Vercel | Configuração preparada; cron terça/sexta | Conexão autenticada lista equipe; criação do projeto recusada com HTTP 403 (forbidden); sem deployment |
+| Vercel | Configuração preparada; cron terça/sexta | Projeto criado pelo usuário. Navegador confirmou vínculo ao GitHub/main e deploy Ready. Dashboard abre. Nenhuma variável de ambiente configurada. Conector retorna 404; integração operacional não validada. |
 | Neon | Schema e migração incremental; runner transacional | Projeto criado; duas migrações testadas no branch de validação e aplicadas em production; cinco tabelas confirmadas |
 | Google OAuth | Estado em cookie, token AES-GCM, canal validado no código; removida chave da URL | Sem credenciais ou consentimento; não testado no canal |
 | Worker | Dockerfile, config Railway, fila/lease/retries, FFmpeg e OpenAI TTS | FFmpeg/ffprobe local passaram; Docker indisponível, build do contêiner não executado |
@@ -24,13 +24,13 @@ Seis testes passaram: horário de Brasília, criptografia autenticada e adultera
 
 ## Recursos e custos
 
-Recursos remotos criados: projeto Neon ainda-bem (rapid-mode-89609596), região aws-us-east-1, PostgreSQL 17, banco aindabem, branch production (br-green-math-b7uatmld) e branch migration-validation-20261024 (br-proud-band-b7odvp5g). Organização Alberto (org-shy-river-94874235), plano free confirmado. Compute solicitado mínimo/máximo de 0,25 CU. Nenhum upgrade ou contratação foi realizado. A conta rejeitou personalização do suspend timeout; foram mantidos os padrões do provedor. O branch de validação permanece criado; não há expiração configurada. Não houve chamada paga às APIs de IA. Não foi possível consultar faturas.
+Banco PostgreSQL provisionado no plano gratuito, com branches separados de produção e validação. Duas migrações aplicadas e verificadas. Detalhes administrativos e identificadores de infraestrutura são omitidos desta documentação pública.
 
-Custos futuros dependem do plano Vercel, computação/volume Railway, uso e armazenamento Neon, duração/quantidade de narrações e modelos OpenAI/Gemini. Valores e limites precisam ser conferidos nas contas antes de contratar. O cron diário evita a configuração original a cada 15 minutos, incompatível com limites Hobby; horário preciso de publicação deve ficar a cargo do YouTube, depois de aprovado e implementado. Alertas diários não oferecem detecção imediata.
+Nenhum upgrade ou contratação realizado. Custos futuros dependem do uso e dos planos de hospedagem, banco, worker e APIs de IA. Conferir limites nas contas antes de contratar.
 
 ## Dependências do usuário
 
-GitHub autenticado como amarianno; repositório amarianno/ainda-bem fornecido pelo usuário, código enviado e arquivos essenciais relidos. A cópia local está vinculada a origin/main; histórico local anterior preservado em local-implementation-history. Vercel autenticada na equipe amarianno-6406 (team_OZg9P37Eqs9VjZv80733u4E5), mas criação de projeto recusada por permissão. CLI Vercel ausente e sem credencial própria disponível. Corrigir a permissão de criação do projeto na Vercel ou criar/importar o projeto na conta correta. Conectar Railway. Autorizar Google OAuth no canal indicado. Fornecer referências aprovadas de Clara/Pingo e conteúdo/fontes para o primeiro vídeo privado. Inserir chaves de OpenAI/Gemini diretamente nos segredos dos serviços. Escolher modelos, teto de gasto e destino de alertas. Nunca enviar senhas ou tokens em chat.
+Aplicação implantada, mas sem variáveis de ambiente. Conexão da Vercel ainda não enxerga o projeto existente; causa exata não identificada. Configurar banco e segredos nos serviços, conectar Railway, concluir OAuth no canal aprovado e fornecer referências visuais autorizadas. Não enviar credenciais em chat nem versioná-las.
 
 ## Pendências de engenharia para automação completa
 
