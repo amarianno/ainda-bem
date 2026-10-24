@@ -1,0 +1,2 @@
+import {pool} from '../../../lib/db';import {bearer} from '../../../lib/guards';
+export async function GET(req:Request){if(!bearer(req,process.env.ADMIN_SETUP_KEY))return new Response('Unauthorized',{status:401});const r=await pool.query('SELECT status,count(*)::int AS count FROM episodes GROUP BY status');return new Response(r.rows.map(x=>`ainda_bem_episodes{status="${x.status}"} ${x.count}`).join('\n')+'\n',{headers:{'Content-Type':'text/plain; version=0.0.4'}});}
