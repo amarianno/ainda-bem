@@ -23,7 +23,7 @@ async function preflight(){
  console.log(JSON.stringify(integrations));
  console.log(JSON.stringify({event:'worker_preflight_passed',ffmpeg:true,storageWritable:true,database:true,tokenDecryptable,googleConfigured:!!(process.env.GOOGLE_CLIENT_ID&&process.env.GOOGLE_CLIENT_SECRET),ttsConfigured:!!(process.env.OPENAI_API_KEY&&process.env.OPENAI_TTS_MODEL)}));
 }
-import { runVoiceProbe } from './voice';
+import { runVoiceProbe,runVoiceAudition } from './voice';
 import { capturePreview } from './preview';
 import { prepareNextEdition,runEditorialProbe } from './research';
 import { verifyPrivateUploads } from './verify';
@@ -35,4 +35,5 @@ await preflight();
 const heartbeat=setInterval(()=>{void pool.query("INSERT INTO worker_heartbeats(id) VALUES('renderer') ON CONFLICT(id) DO UPDATE SET updated_at=now()").catch(()=>{});},60000);
 await runEditorialProbe();
 await runVoiceProbe();
+await runVoiceAudition();
 let stopping=false;process.on('SIGTERM',()=>{stopping=true;});while(!stopping){try{await tick();}catch(e){console.error(JSON.stringify({event:'worker_tick_failed',code:typeof e==='object'&&e!==null&&'code' in e?String(e.code):'Error'}));}await new Promise(r=>setTimeout(r,15000));}clearInterval(heartbeat);await pool.end();
