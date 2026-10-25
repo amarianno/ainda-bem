@@ -5,7 +5,7 @@ import { pool } from '../lib/db';
 export const claraDelivery='Você é a apresentadora adulta Clara, do jornal Ainda Bem!. Fale em português brasileiro, com voz feminina adulta em registro médio-grave, timbre encorpado e caloroso, sorriso discreto na voz, energia positiva e presença. Preserve uma fala natural, com ressonância confortável, sem voz aguda, sopros excessivos, voz rouca forçada ou entonação cantada. Use entonação variada, ritmo ágil e conversado, pausas curtas e clareza nos números. O tom é de uma apresentadora bem-humorada compartilhando uma boa notícia: caloroso, confiante e curioso. Realce com leveza as frases de humor já presentes no texto. Não soe melancólica, solene, robótica, infantil ou como locução de propaganda. Não grite nem acrescente risadas ou palavras. Não imite nenhuma pessoa real.';
 export function speechRequest(input:string,voice?:'sage'|'marin'){
  const speed=Number(process.env.OPENAI_TTS_SPEED||'1.05');if(!Number.isFinite(speed)||speed<0.8||speed>1.3)throw new Error('Invalid speech speed');
- return {model:process.env.OPENAI_TTS_MODEL||'gpt-4o-mini-tts',input,voice:voice||process.env.OPENAI_TTS_VOICE||'sage',speed,response_format:'mp3',instructions:claraDelivery};
+ return {model:process.env.OPENAI_TTS_MODEL||'gpt-4o-mini-tts',input,voice:voice||process.env.OPENAI_TTS_VOICE||'marin',speed,response_format:'mp3',instructions:claraDelivery};
 }
 export async function synthesize(input:string,voice?:'sage'|'marin'){
  const r=await fetch('https://api.openai.com/v1/audio/speech',{method:'POST',headers:{Authorization:`Bearer ${process.env.OPENAI_API_KEY}`,'Content-Type':'application/json'},body:JSON.stringify(speechRequest(input,voice)),signal:AbortSignal.timeout(120000)});
