@@ -5,9 +5,9 @@ export class HeygenClient {
  constructor(private key:string,private request:typeof fetch=fetch){
   if(!key||key.trim()!==key)throw new Error('Invalid HeyGen key configuration');
  }
- async uploadAudio(bytes:Buffer){
+ async uploadAudio(bytes:Buffer,mime:'audio/wav'|'audio/mpeg'='audio/wav'){
   if(bytes.length>32_000_000)throw new Error('Audio asset exceeds 32 MB');
-  const body=new FormData();body.append('file',new Blob([new Uint8Array(bytes)],{type:'audio/wav'}),'ainda-bem-test05.wav');
+  const body=new FormData();body.append('file',new Blob([new Uint8Array(bytes)],{type:mime}),mime==='audio/wav'?'ainda-bem.wav':'ainda-bem.mp3');
   const r=await this.request('https://api.heygen.com/v3/assets',{method:'POST',headers:{'X-Api-Key':this.key},body,signal:AbortSignal.timeout(120000)});
   let j:any;try{j=await r.json();}catch{throw new HeygenError(r.status,'INVALID_RESPONSE');}
   if(!r.ok)throw new HeygenError(r.status,'ASSET_UPLOAD_FAILED');
