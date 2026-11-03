@@ -47,7 +47,7 @@ for i,e in enumerate(events):
  if e['kind']=='image':
   p=local(e['path']);raw=p.read_bytes()
   if hashlib.sha256(raw).hexdigest()!=e['sha256']:raise ValueError('Image checksum mismatch')
-  im=Image.open(p).convert('RGBA');im.thumbnail((1220,500));images[i]=im
+  im=Image.open(p).convert('RGBA');im.thumbnail((1220,480));images[i]=im
 
 cap_layers=[];bounds=[]
 for c in cs:
@@ -109,7 +109,7 @@ for frame in range(count):
   if e['start']<=t<e['end']:
    if e['kind']=='image':
     # A factual image gets its own cutaway. Nothing is drawn over its text.
-    im=Image.new('RGBA',(W,H),'#fff6e4');asset=images[i];im.alpha_composite(asset,((W-asset.width)//2,42));hide_ticker=e.get('hasEmbeddedText',True);dr=ImageDraw.Draw(im);dr.text((30,555),e.get('credit',''),font=font(18),fill='#073c44')
+    im=Image.new('RGBA',(W,H),'#fff6e4');asset=images[i];im.alpha_composite(asset,((W-asset.width)//2,42));hide_ticker=e.get('hasEmbeddedText',True);dr=ImageDraw.Draw(im);dr.text((30,525),e.get('credit',''),font=font(18),fill='#073c44')
    else:im.alpha_composite(editorial_card(i),(730,165))
  if not hide_ticker:im.alpha_composite(ticker(t),(0,661))
  while ci<len(cs) and cs[ci]['end']<=t:ci+=1
