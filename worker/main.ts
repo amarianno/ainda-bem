@@ -24,6 +24,7 @@ async function preflight(){
  console.log(JSON.stringify({event:'worker_preflight_passed',ffmpeg:true,storageWritable:true,database:true,tokenDecryptable,googleConfigured:!!(process.env.GOOGLE_CLIENT_ID&&process.env.GOOGLE_CLIENT_SECRET),ttsConfigured:!!(process.env.OPENAI_API_KEY&&process.env.OPENAI_TTS_MODEL)}));
 }
 import { runEditorialAudioPilot } from './pilot-audio';
+import { verifyHeygenApi,tickHeygenPilot } from './heygen-pilot';
 import { runVoiceProbe,runVoiceAudition } from './voice';
 import { capturePreview } from './preview';
 import { prepareNextEdition,runEditorialProbe } from './research';
@@ -33,9 +34,10 @@ async function tick(){await verifyPrivateUploads();await capturePreview();await 
 const timer=setInterval(()=>{void pool.query("INSERT INTO worker_heartbeats(id) VALUES('renderer') ON CONFLICT(id) DO UPDATE SET updated_at=now()").catch(()=>{});void pool.query("UPDATE episodes SET lease_until=now()+interval '5 minutes',updated_at=now() WHERE id=$1",[e.id]).catch(()=>console.error(JSON.stringify({event:'lease_failed',episodeId:e.id})));},60000);
 try{if(e.status!=='UPLOADING'){const r=await render(e.id,e.script_json);e.render_path=r.path;await pool.query("UPDATE episodes SET render_path=$2,render_sha256=$3,status='UPLOADING',updated_at=now() WHERE id=$1",[e.id,r.path,r.sha256]);}const id=await upload(e);await pool.query("UPDATE episodes SET youtube_video_id=$2,status='VERIFYING',lease_until=NULL,updated_at=now() WHERE id=$1",[e.id,id]);await pool.query("INSERT INTO audit_events(episode_id,event_type) VALUES($1,'PRIVATE_UPLOAD_COMPLETE')",[e.id]);console.log(JSON.stringify({event:'private_upload_complete',episodeId:e.id,videoId:id}));}catch(x){const code=x instanceof Error&&/^(TTS HTTP \d+|FFmpeg failed|Approved media unavailable|Video .*failed|Media hash mismatch|Upload [a-z]+ \d+.*)$/.test(x.message)?x.message:(x instanceof Error?x.name:'Error');await pool.query("UPDATE episodes SET last_error=$2,status=CASE WHEN attempts>=5 THEN 'FAILED' ELSE status END,updated_at=now() WHERE id=$1",[e.id,code]);console.error(JSON.stringify({event:'worker_failed',episodeId:e.id,error:code}));}finally{clearInterval(timer);}}
 await preflight();
+await verifyHeygenApi();
 const heartbeat=setInterval(()=>{void pool.query("INSERT INTO worker_heartbeats(id) VALUES('renderer') ON CONFLICT(id) DO UPDATE SET updated_at=now()").catch(()=>{});},60000);
 await runEditorialProbe();
 await runVoiceProbe();
 await runVoiceAudition();
 await runEditorialAudioPilot();
-let stopping=false;process.on('SIGTERM',()=>{stopping=true;});while(!stopping){try{await tick();}catch(e){console.error(JSON.stringify({event:'worker_tick_failed',code:typeof e==='object'&&e!==null&&'code' in e?String(e.code):'Error'}));}await new Promise(r=>setTimeout(r,15000));}clearInterval(heartbeat);await pool.end();
+let stopping=false;process.on('SIGTERM',()=>{stopping=true;});while(!stopping){try{await tickHeygenPilot();await tick();}catch(e){console.error(JSON.stringify({event:'worker_tick_failed',code:typeof e==='object'&&e!==null&&'code' in e?String(e.code):'Error'}));}await new Promise(r=>setTimeout(r,15000));}clearInterval(heartbeat);await pool.end();
