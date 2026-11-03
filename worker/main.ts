@@ -25,6 +25,7 @@ async function preflight(){
 }
 import { runEditorialAudioPilot } from './pilot-audio';
 import { alignPilotCaptions } from './pilot-captions';
+import { tickTest05 } from './test05';
 import { verifyHeygenApi,tickHeygenPilot } from './heygen-pilot';
 import { runVoiceProbe,runVoiceAudition } from './voice';
 import { capturePreview } from './preview';
@@ -42,4 +43,4 @@ await runVoiceProbe();
 await runVoiceAudition();
 await runEditorialAudioPilot();
 await alignPilotCaptions();
-let stopping=false;process.on('SIGTERM',()=>{stopping=true;});while(!stopping){try{await tickHeygenPilot();await tick();}catch(e){console.error(JSON.stringify({event:'worker_tick_failed',code:typeof e==='object'&&e!==null&&'code' in e?String(e.code):'Error'}));}await new Promise(r=>setTimeout(r,15000));}clearInterval(heartbeat);await pool.end();
+let stopping=false;process.on('SIGTERM',()=>{stopping=true;});while(!stopping){try{await tickTest05();await tickHeygenPilot();await tick();}catch(e){console.error(JSON.stringify({event:'worker_tick_failed',code:typeof e==='object'&&e!==null&&'code' in e?String(e.code):'Error'}));}await new Promise(r=>setTimeout(r,15000));}clearInterval(heartbeat);await pool.end();

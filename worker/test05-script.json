@@ -1,0 +1,27 @@
+{
+  "status": "confirmed_in_chat",
+  "voice": "marin",
+  "scenes": [
+    {
+      "title": "Abertura",
+      "narration": "Uma tampinha esquecida na cozinha pode entrar numa corrente de solidariedade. Hoje, o Ainda Bem! começa em Osasco e termina no Caribe. Pingo, você está de plantão? Pelo visto, ele só aceita pauta com carinho. Esta é uma edição de teste com apresentação sintética."
+    },
+    {
+      "title": "Osasco — Tampinhas que Curam",
+      "narration": "Em Osasco, a Faculdade de Osasco anunciou, em abril de dois mil e vinte e cinco, uma parceria com o projeto Tampinhas que Curam. A instituição divulgou a coleta de tampinhas e lacres e a realização de mutirões de triagem. Segundo o projeto, a venda dos materiais para reciclagem ajuda crianças e adolescentes em tratamento contra o câncer. Para colaborar, consulte os pontos de coleta e as orientações no site da organização. Pequenas peças, muita gente ajudando: é assim que essa corrente ganha força."
+    },
+    {
+      "title": "Osasco — formação audiovisual",
+      "narration": "Agora, uma oportunidade com prazo: Osasco abriu seleção para uma formação gratuita em audiovisual, em parceria com o Instituto Criar. As inscrições vão até oito de novembro de dois mil e vinte e seis. A seleção é para jovens de dezessete a vinte e quatro anos e tem critérios de residência, renda e escolaridade. Segundo a prefeitura, os selecionados recebem bolsa-auxílio durante o programa. Pingo, seu teste de câmera está ótimo. Falta só parar de procurar petisco na bancada!"
+    },
+    {
+      "title": "Mundo — Barbados",
+      "narration": "No Caribe, Barbados recebeu um reconhecimento da Organização Mundial da Saúde, anunciado em trinta de outubro: a eliminação da transmissão do HIV de mãe para filho como problema de saúde pública. Entre dois mil e vinte e dois e dois mil e vinte e quatro, o país não notificou novas infecções em bebês por essa via. O resultado foi sustentado por acompanhamento pré-natal, testagem e tratamento. Uma conquista construída com cuidado e continuidade."
+    },
+    {
+      "title": "Encerramento",
+      "narration": "Pingo, encerramos? Esse olhar pediu mais uma boa notícia. As outras estão na faixa de manchetes; as fontes, na descrição. Até a próxima!"
+    }
+  ],
+  "source_library_id": "libfile_329222b7f14881918fb91cfdd4dd54f9"
+}
