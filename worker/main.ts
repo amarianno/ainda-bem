@@ -24,6 +24,7 @@ async function preflight(){
  console.log(JSON.stringify({event:'worker_preflight_passed',ffmpeg:true,storageWritable:true,database:true,tokenDecryptable,googleConfigured:!!(process.env.GOOGLE_CLIENT_ID&&process.env.GOOGLE_CLIENT_SECRET),ttsConfigured:!!(process.env.OPENAI_API_KEY&&process.env.OPENAI_TTS_MODEL)}));
 }
 import { runEditorialAudioPilot } from './pilot-audio';
+import { alignPilotCaptions } from './pilot-captions';
 import { verifyHeygenApi,tickHeygenPilot } from './heygen-pilot';
 import { runVoiceProbe,runVoiceAudition } from './voice';
 import { capturePreview } from './preview';
@@ -40,4 +41,5 @@ await runEditorialProbe();
 await runVoiceProbe();
 await runVoiceAudition();
 await runEditorialAudioPilot();
+await alignPilotCaptions();
 let stopping=false;process.on('SIGTERM',()=>{stopping=true;});while(!stopping){try{await tickHeygenPilot();await tick();}catch(e){console.error(JSON.stringify({event:'worker_tick_failed',code:typeof e==='object'&&e!==null&&'code' in e?String(e.code):'Error'}));}await new Promise(r=>setTimeout(r,15000));}clearInterval(heartbeat);await pool.end();
